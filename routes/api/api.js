@@ -61,8 +61,8 @@ router.post('/login', (req, res, next) =>{
 			return res.json(
 				{message: 'Incorrect username or password', path: "/", user: null}
 			);
-		};
-	  	req.login(user, (err) => {
+
+		}req.login(user, (err) => {
 			if (err) { return res.status(400).send(err); }
 			return res.json(
 				{message: 'You are now logged in!',  path: "/lobby", user: user.username}
@@ -90,6 +90,35 @@ router.get('/logout', (req, res) => {
 	} else {
 		console.log("Already signed out");
 	}
+});
+
+router.get('/leaderboard', function(req, res, next) {
+	
+	User.find().then((dbUsers) => {
+
+		// res.json(dbUsers);
+		// console.log("Users Found");
+		var result = [];
+      
+		for(var i=0; i<dbUsers.length; i++){
+
+			let resultsObj = {};
+
+			resultsObj.joindate = dbUsers[i].joindate;
+      		resultsObj.username = dbUsers[i].username;
+      		resultsObj.wins = dbUsers[i].wins;
+      		resultsObj.losses = dbUsers[i].losses;
+      		resultsObj.totalScore = dbUsers[i].totalScore;
+
+      		result.push(resultsObj);
+      		console.log(result);
+
+		}
+	res.json(result);
+	console.log(result);
+
+  })
+	
 });
 
 module.exports = router;
