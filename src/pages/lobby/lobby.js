@@ -26,15 +26,28 @@ class Lobby extends React.Component{
 			if(response.data.isAuthenticated === false){
 				this.setState({
 					loggedin: false
-      			});
+      	});
 			};
+		});
+	};
+
+	componentWillMount(){
+		axios.get('/api/').then(response => {
+			if(response.data.isAuthenticated === true){
+				this.setState({
+					loggedin: true
+      	})
+			} else {
+        this.setState({
+					loggedin: false
+      	});
+      };
 		});
 	};
 
 	//Sets up the game owner
 	componentDidMount(){
 		axios.get("/api/lobby").then(response => {
-			console.log(response)
 			this.setState({
 				owner: response.data.username,
 				score: response.data.totalscore
